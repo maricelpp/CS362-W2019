@@ -660,7 +660,7 @@ int smithyCard(int currentPlayer, struct gameState *state, int handPos)
 	return 0;
 }
 
-int adventurerCard(int drawntreasure, struct gameState *state, int currentPlayer, int cardDrawn, int temphand[])
+int adventurerCard(int drawntreasure, struct gameState *state, int currentPlayer, int temphand[])
 {
 	int z=0;
 	int cardDrawn;
@@ -710,7 +710,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
   switch( card ) 
     {
     case adventurer:
-			return adventurerCard(drawntreasure, state, currentPlayer, cardDrawn, temphand);
+			return adventurerCard(drawntreasure, state, currentPlayer, temphand);
 
 			
     case council_room:
