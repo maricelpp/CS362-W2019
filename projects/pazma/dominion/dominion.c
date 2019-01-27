@@ -662,7 +662,7 @@ int smithyCard(int currentPlayer, struct gameState *state, int handPos)
 
 int adventurerCard(int drawntreasure, struct gameState *state, int currentPlayer, int cardDrawn, int temphand[])
 {
-	int z;
+	int z=0;
 	
 	while(drawntreasure<2){
 		if (state->deckCount[currentPlayer] <1){//if the deck is empty we need to shuffle discard and add to deck
