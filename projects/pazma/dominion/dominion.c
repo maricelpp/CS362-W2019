@@ -660,7 +660,7 @@ int smithyCard(int currentPlayer, struct gameState *state, int handPos)
 	return 0;
 }
 
-int adventurerCard(int drawntreasure, struct gameState *state, int currentPlayer, int cardDrawn, int temphand)
+int adventurerCard(int drawntreasure, struct gameState *state, int currentPlayer, int cardDrawn, int[] temphand)
 {
 	int z;
 	
