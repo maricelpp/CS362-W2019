@@ -692,8 +692,8 @@ int villageCard(int currentPlayer, struct gameState *state, int handPos)
 	//+1 Card
 	drawCard(currentPlayer, state);
 	
-	//+2 Actions
-	state->numActions = state->numActions + 2;
+	//+2 Actions [BUG: Should increase actions by 2 instead of 1.]
+	state->numActions = state->numActions + 1;
 	
 	//discard played card from hand
 	discardCard(handPos, currentPlayer, state, 0);
@@ -758,8 +758,9 @@ int mineCard(int currentPlayer, struct gameState *state, int handPos, int choice
 	//discard card from hand
 	discardCard(handPos, currentPlayer, state, 0);
 	
+	// [ BUG: Initiated i to 1 instead of 0 ]
 	//discard trashed card
-	for (i = 0; i < state->handCount[currentPlayer]; i++)
+	for (i = 1; i < state->handCount[currentPlayer]; i++)
 	{
 		if (state->hand[currentPlayer][i] == j)
 		{
