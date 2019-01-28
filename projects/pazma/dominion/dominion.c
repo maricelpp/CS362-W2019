@@ -649,8 +649,8 @@ int smithyCard(int currentPlayer, struct gameState *state, int handPos)
 {
 	int i;
 	
-	//+3 Cards
-	for (i = 0; i < 3; i++)
+	//+3 Cards [BUG: Should be i < 3]
+	for (i = 0; i < 4; i++)
 	{
 		drawCard(currentPlayer, state);
 	}
@@ -662,7 +662,8 @@ int smithyCard(int currentPlayer, struct gameState *state, int handPos)
 
 int adventurerCard(int drawntreasure, struct gameState *state, int currentPlayer, int temphand[])
 {
-	int z=0;
+	// [BUG: Should be z=0]
+	int z=1;
 	int cardDrawn;
 	
 	while(drawntreasure<2){
