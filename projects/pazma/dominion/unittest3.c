@@ -18,7 +18,7 @@ void assertTest(int a, int b, char* message){
 };
 
 int main() {
-	int i;
+	int r;
 	int seed = 1000;
 	int numPlayer = 4;
 	
@@ -30,7 +30,7 @@ int main() {
 	int currPlayer = -1;
 	
 	printf ("TESTING whoseTurn():\n");
-	for (p = 0; p < numPlayer; p++)
+	for (int p = 0; p < numPlayer; p++)
 	{
 			printf("Test player %d\n", p);
 			
@@ -41,7 +41,7 @@ int main() {
 			currPlayer = whoseTurn(&G);
 		
 			assertTest(currPlayer, p, "Current Player\n\n"); // check if the number of cards is correct
-		}
+		
 	}
 	
 	return 0;

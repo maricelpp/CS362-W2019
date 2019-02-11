@@ -18,6 +18,7 @@ void assertTest(int a, int b, char* message){
 };
 
 int main() {
+	int r;
 	int seed = 1000;
 	int numPlayer = 2;
 	
@@ -35,21 +36,21 @@ int main() {
 	{
 		for (int j = 0; j < handMax; j++)
 		{
-			for (int k = 0; k < discardMax; k++)
+			for (int l = 0; l < discardMax; l++)
 			{
-				for (p = 0; p < numPlayer; p++)
+				for (int p = 0; p < numPlayer; p++)
 				{
-					printf("Test player %d with %d cards in deck, %d cards in hand, %d cards in discard\n", p, i, j, k);
+					printf("Test player %d with %d cards in deck, %d cards in hand, %d cards in discard\n", p, i, j, l);
 					
 					memset(&G, 23, sizeof(struct gameState));   // clear the game state
 					r = initializeGame(numPlayer, k, seed, &G); // initialize a new game
 					G.deckCount[p] = i;
 					G.handCount[p] = j;                 // set the number of cards on hand
-					G.discardCount[p] = k;
+					G.discardCount[p] = l;
 					
 					fullCount = fullDeckCount(p, 1, &G);
 					
-					assertTest(fullCount, i+j+k, "Full Deck Count\n\n"); // check if the number of cards is correct
+					assertTest(fullCount, i+j+l, "Full Deck Count\n\n"); // check if the number of cards is correct
 				}
 			}
 		}

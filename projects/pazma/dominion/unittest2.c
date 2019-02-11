@@ -18,7 +18,7 @@ void assertTest(int a, int b, char* message){
 };
 
 int main() {
-	int i;
+	int i, r;
 	int seed = 1000;
 	int numPlayer = 2;
 
@@ -30,9 +30,9 @@ int main() {
 	int currHandCount = -1;
 	
 	printf ("TESTING numHandCards():\n");
-	for (p = 0; p < numPlayer; p++)
+	for (int p = 0; p < numPlayer; p++)
 	{
-		for (handCount = 1; handCount <= maxHandCount; handCount++)
+		for (int handCount = 1; handCount <= maxHandCount; handCount++)
 		{
 				printf("Test player %d with %d cards in hand\n", p, handCount);
 
