@@ -53,7 +53,7 @@ int main() {
 	// copy the game state to a test case
 	memcpy(&testG, &G, sizeof(struct gameState));
 	
-	cardEffect(smithy, choice1, choice2, choice3, &testG, handpos, &bonus);
+	cardEffect(adventurer, choice1, choice2, choice3, &testG, handpos, &bonus);
 	
 	newCards = 2; // Adventurer acquires 2 cards
 	discardCards = 1; // Adventurer is discarded after it is played
