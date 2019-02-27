@@ -54,37 +54,35 @@ int main () {
 	struct gameState G;
 	
 	printf ("Testing drawCard.\n");
-	
-	printf ("HERE.\n");
-
 	printf ("RANDOM TESTS.\n");
 	
 	SelectStream(2);
-	
 	PutSeed(3);
 	
-	srand(time(NULL));
-	
+	//srand(time(NULL));
+
 	// Create game random state
 	for (n = 0; n < 2000; n++) {
+
+
 		for (i = 0; i < sizeof(struct gameState); i++) {
 			((char*)&G)[i] = floor(Random() * 256);
 		}
-		
 		
 		player = floor(Random() * 2);
 		G.deckCount[player] = floor(Random() * MAX_DECK);
 		G.discardCount[player] = floor(Random() * MAX_DECK);
 		G.handCount[player] = floor(Random() * MAX_HAND);
-		/*
+
 		for (j = 0; j < G.handCount[player]; j++) {
+	
 			if (handCard(j, &G) == smithy)
 			{
-				smithyPos = i;
-				checkSmithy(player, &G, smithyPos);
+				//smithyPos = j;
+				//checkSmithy(player, &G, smithyPos);
 			}
+		
 		}
-		 */
 	}
 	
 	printf ("ALL TESTS OK\n");
