@@ -30,7 +30,7 @@ runtests: testDrawCard
 	cat dominion.c.gcov >> unittestresult.out
 
 
-testRandom: randomtestcard2.c dominion.o rags.o
+testRandom: randomtestcard2.c dominion.o rngs.o
 	gcc  -o testRandom -g  randomtestcard2.c dominion.o rngs.o $(CFLAGS)
 
 runRandom: testRandom

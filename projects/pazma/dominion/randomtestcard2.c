@@ -43,7 +43,7 @@ int checkSmithy(int currentPlayer, struct gameState *post, int handPos) {
 
 int main () {
 	
-	int i, j, n, r, player, deckCount, discardCount, handCount;
+	int i, j, n, r, player, deckCount, discardCount, handCount, smithyPos;
 	
 	int k[10] = {adventurer, council_room, feast, gardens, mine,
 		remodel, smithy, village, baron, great_hall};
