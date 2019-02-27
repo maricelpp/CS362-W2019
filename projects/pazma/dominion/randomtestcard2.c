@@ -79,8 +79,6 @@ int main () {
 	
 	printf ("ALL TESTS OK\n");
 	
-	exit(0);
-	
 	printf ("SIMPLE FIXED TESTS.\n");
 	for (player = 0; player < 2; player++) {
 		for (deckCount = 0; deckCount < 5; deckCount++) {
