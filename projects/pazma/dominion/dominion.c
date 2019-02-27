@@ -650,7 +650,7 @@ int smithyCard(int currentPlayer, struct gameState *state, int handPos)
 	int i;
 	
 	//+3 Cards [BUG: Should be i < 3]
-	for (i = 0; i < 4; i++)
+	for (i = 0; i < 3; i++)
 	{
 		drawCard(currentPlayer, state);
 	}
