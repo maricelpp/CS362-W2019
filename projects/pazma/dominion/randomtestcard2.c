@@ -54,6 +54,7 @@ int main () {
 	struct gameState G;
 	
 	printf ("Testing drawCard.\n");
+	printf ("TestTESTTest.\n");
 	printf ("RANDOM TESTS.\n");
 	
 	SelectStream(2);
