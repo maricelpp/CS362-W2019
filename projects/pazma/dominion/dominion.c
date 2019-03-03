@@ -662,18 +662,28 @@ int smithyCard(int currentPlayer, struct gameState *state, int handPos)
 
 int adventurerCard(int drawntreasure, struct gameState *state, int currentPlayer, int temphand[])
 {
+	//printf("In adventurer\n");
+
 	// [BUG: Should be z=0]
-	int z=1;
+	int z=0;
 	int cardDrawn;
 	
-	while(drawntreasure<2){
+	while((state->deckCount[currentPlayer]!=0 && state->discardCount[currentPlayer]!=0) || drawntreasure<2){
+		/*
 		if (state->deckCount[currentPlayer] <1){//if the deck is empty we need to shuffle discard and add to deck
 			shuffle(currentPlayer, state);
 		}
+		 */
+		
+		//printf("In adventurer loop \n");
 		drawCard(currentPlayer, state);
 		cardDrawn = state->hand[currentPlayer][state->handCount[currentPlayer]-1];//top card of hand is most recently drawn card.
 		if (cardDrawn == copper || cardDrawn == silver || cardDrawn == gold)
+		{
 			drawntreasure++;
+			//printf("Card is: %d\n", cardDrawn);
+			//printf("Treasure total is: %d\n", drawntreasure);
+		}
 		else{
 			temphand[z]=cardDrawn;
 			state->handCount[currentPlayer]--; //this should just remove the top card (the most recently drawn one).
@@ -693,7 +703,7 @@ int villageCard(int currentPlayer, struct gameState *state, int handPos)
 	drawCard(currentPlayer, state);
 	
 	//+2 Actions [BUG: Should increase actions by 2 instead of 1.]
-	state->numActions = state->numActions + 1;
+	state->numActions = state->numActions + 2;
 	
 	//discard played card from hand
 	discardCard(handPos, currentPlayer, state, 0);
@@ -796,7 +806,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
   switch( card ) 
     {
     case adventurer:
-			return adventurerCard(drawntreasure, state, currentPlayer, temphand);
+		return adventurerCard(drawntreasure, state, currentPlayer, temphand);
 
 			
     case council_room:

@@ -1,0 +1,1 @@
+Assertion failed: (preTest.handCount[currentPlayer] == state.handCount[currentPlayer]), function main, file randomtestadventurer.c, line 103.

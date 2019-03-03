@@ -1,117 +1,152 @@
+//  randomtestcard2.c
+// 	Smithy Card
+//	CS-362 W2019
+// 	Assignment 4
+
+
 #include "dominion.h"
 #include "dominion_helpers.h"
+#include "rngs.h"
 #include <string.h>
 #include <stdio.h>
 #include <assert.h>
 #include <math.h>
-#include "rngs.h"
+#include <stdlib.h>
+#include <time.h>
 
 #define DEBUG 0
 #define NOISY_TEST 1
 
-int checkSmithy(int currentPlayer, struct gameState *post, int handPos) {
-	int r;
-	struct gameState pre;
-	
-	//memcpy(&pre, post, sizeof(struct gameState));
-	
-	r = smithyCard(currentPlayer, post, handPos);
-	/*
-	for(int maxdraw = 0; maxdraw < 3; maxdraw++)
-	{
-		if (pre.deckCount[currentPlayer] > 0)
-		{
-			pre.handCount[currentPlayer]++;
-			pre.hand[currentPlayer][pre.handCount[currentPlayer]-1] = pre.deck[currentPlayer][pre.deckCount[currentPlayer]-1];
-			pre.deckCount[currentPlayer]--;
-		}
-		else if (pre.discardCount[currentPlayer] > 0)
-		{
-			memcpy(pre.deck[currentPlayer], post->deck[currentPlayer], sizeof(int) * pre.discardCount[currentPlayer]);
-			memcpy(pre.discard[currentPlayer], post->discard[currentPlayer], sizeof(int) * pre.discardCount[currentPlayer]);
-			pre.hand[currentPlayer][post->handCount[currentPlayer]-1] = post->hand[currentPlayer][post->handCount[currentPlayer]-1];
-			pre.handCount[currentPlayer]++;
-			pre.deckCount[currentPlayer] = pre.discardCount[currentPlayer]-1;
-			pre.discardCount[currentPlayer] = 0;
-		}
-	}
-	
-	discardCard(handPos, currentPlayer, &pre, 0);
-	*/
-	assert (r == 0);
-	//assert (memcmp(&pre, post, sizeof(struct gameState)) == 0);
-	
-	return 0;
-}
 
 int main () {
 	
-	int i, j, n, r, player, deckCount, discardCount, handCount, smithyPos;
+	int numPlayers = 0, currentPlayer = 0, smithyPos = -1;
+	int choice1 = 0, choice2 = 0, choice3 = 0, bonus = 0;
+	int randomSeed = 0, deckSize = 0, handSize = 0, discardSize = 0;
+	int n = 0, r = 0;
+
 	
-	int k[10] = {adventurer, council_room, feast, gardens, mine,
+	int kindomCards[10] = {adventurer, council_room, feast, gardens, mine,
 		remodel, smithy, village, baron, great_hall};
-	
-	struct gameState G;
-	
-	printf ("Testing drawCard.\n");
-	printf ("TestTESTTest.\n");
-	printf ("RANDOM TESTS.\n");
-	
-	SelectStream(2);
-	PutSeed(3);
-	
-	//srand(time(NULL));
 
+	struct gameState preTest, state;
+	
+	//printf ("Testing Smithy.\n");
+	//printf ("RANDOM TESTS.\n");
+	
+	//SelectStream(2);
+	//PutSeed(3);
+	
+	srand(time(0));
+	
+	randomSeed = rand();
+	
 	// Create game random state
-	for (n = 0; n < 2000; n++) {
-
-
-		for (i = 0; i < sizeof(struct gameState); i++) {
-			((char*)&G)[i] = floor(Random() * 256);
+	for (n = 0; n < 100; n++) {
+		
+		//printf("In loop %d\n", n);
+		
+		// Set number of players according to max. Must be 2-4 players
+		numPlayers = (rand() % 3) + 2;
+		
+		// Initialize a game with random values
+		initializeGame(numPlayers, kindomCards, randomSeed, &state);
+		
+		// Select current player randomly
+		currentPlayer = rand() % state.numPlayers; // Does this need +1?
+		
+		// Set current player to random player
+		state.whoseTurn = currentPlayer;
+		
+		
+		
+		// Set deck size
+		deckSize = 10 + (rand() % MAX_DECK - 9);
+		//printf("DECK SIZE: %d\n", deckSize);
+		
+		// Set hand size (must be less than or equal to deck size
+		handSize = (rand() % (MAX_DECK - deckSize - 1)) + 1;
+		//printf("HAND SIZE: %d\n", handSize);
+		
+		// Set hand size (must be less than or equal to deck size
+		discardSize = rand() % (MAX_DECK - (deckSize + handSize)) + 1;
+		//printf("DISCARD SIZE: %d\n", discardSize);
+		
+		// Set current player's deck and hand count.
+		state.deckCount[currentPlayer] = deckSize;
+		state.handCount[currentPlayer] = handSize;
+		state.discardCount[currentPlayer] = discardSize;
+		
+		if(state.handCount[currentPlayer] < 1)
+		{
+			return 0;
 		}
 		
-		player = floor(Random() * 2);
-		G.deckCount[player] = floor(Random() * MAX_DECK);
-		G.discardCount[player] = floor(Random() * MAX_DECK);
-		G.handCount[player] = floor(Random() * MAX_HAND);
-
-		for (j = 0; j < G.handCount[player]; j++) {
-	
-			if (handCard(j, &G) == smithy)
-			{
-				//smithyPos = j;
-				//checkSmithy(player, &G, smithyPos);
-			}
+		// Set Smithy position to last card in hand
+		smithyPos = state.handCount[currentPlayer] - 1;
 		
+		// Create copy of pre-play state
+		memcpy(&preTest, &state, sizeof(struct gameState));
+		
+		
+		// Play card
+		r = cardEffect(smithy, choice1, choice2, choice3, &state, smithyPos, &bonus);
+		
+		
+		// Ensure play executed successfully
+		assert (r == 0);
+
+		
+		// TEST ORACLE
+		
+		// Update hand, deck, and discard counts.
+		if((preTest.deckCount[currentPlayer] + preTest.discardCount[currentPlayer]) < 3)
+		{
+			preTest.handCount[currentPlayer] = preTest.handCount[currentPlayer] + preTest.deckCount[currentPlayer] + preTest.discardCount[currentPlayer];
+			
+			// Set discard and deck to 0 after discard is shuffled and added to deck and all are added to hand
+			preTest.discardCount[currentPlayer] = 0;
+			preTest.deckCount[currentPlayer] = 0;
+			
+			// Discard a card (Smithy played card)
+			preTest.playedCardCount = preTest.playedCardCount + 1;
+			preTest.handCount[currentPlayer] = preTest.handCount[currentPlayer] - 1;
+
 		}
+		
+		else if (preTest.deckCount[currentPlayer] < 3)
+		{
+			preTest.deckCount[currentPlayer] = preTest.deckCount[currentPlayer] + preTest.discardCount[currentPlayer];
+			preTest.discardCount[currentPlayer] = 0;
+			
+			preTest.handCount[currentPlayer] = preTest.handCount[currentPlayer] + 3;
+			preTest.deckCount[currentPlayer] = preTest.deckCount[currentPlayer] - 3;
+			
+			// Discard a card (Smithy played card)
+			preTest.playedCardCount = preTest.playedCardCount + 1;
+			preTest.handCount[currentPlayer] = preTest.handCount[currentPlayer] - 1;
+		}
+		
+		else
+		{
+			preTest.handCount[currentPlayer] = preTest.handCount[currentPlayer] + 3;
+			preTest.deckCount[currentPlayer] = preTest.deckCount[currentPlayer] - 3;
+			
+			// Discard a card (Smithy played card)
+			preTest.playedCardCount = preTest.playedCardCount + 1;
+			preTest.handCount[currentPlayer] = preTest.handCount[currentPlayer] - 1;
+		}
+		
+		
+		assert(preTest.playedCardCount == state.playedCardCount);
+		assert(preTest.handCount[currentPlayer] == state.handCount[currentPlayer]);
+		assert(preTest.deckCount[currentPlayer] == state.deckCount[currentPlayer]);
+		
 	}
 	
-	printf ("ALL TESTS OK\n");
-	/*
-	printf ("SIMPLE FIXED TESTS.\n");
-	for (player = 0; player < 2; player++) {
-		for (deckCount = 0; deckCount < 5; deckCount++) {
-			for (discardCount = 0; discardCount < 5; discardCount++) {
-				for (handCount = 0; handCount < 5; handCount++) {
-					memset(&G, 23, sizeof(struct gameState));
-					r = initializeGame(2, k, 1, &G);
-					G.deckCount[player] = deckCount;
-					memset(G.deck[player], 0, sizeof(int) * deckCount);
-					G.discardCount[player] = discardCount;
-					memset(G.discard[player], 0, sizeof(int) * discardCount);
-					G.handCount[player] = handCount;
-					memset(G.hand[player], 0, sizeof(int) * handCount);
-					for (j = 0; j < G.handCount[player]; j++) {
-						if (handCard(j, &G) == smithy)
-						{
-							smithyPos = i;
-							checkSmithy(player, &G, smithyPos);
-						}
-					}
-				}
-			}
-		}
-	}
-	*/
+
+
+	//printf ("ALL TESTS OK\n");
+	
 	return 0;
 }

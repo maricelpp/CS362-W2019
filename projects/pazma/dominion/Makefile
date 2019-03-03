@@ -10,6 +10,7 @@ playdom: dominion.o playdom.c
 	gcc -o playdom playdom.c -g dominion.o rngs.o $(CFLAGS)
 
 #To run playdom you need to entere: ./playdom <any integer number> like ./playdom 10*/
+
 testDrawCard: testDrawCard.c dominion.o rngs.o
 	gcc  -o testDrawCard -g  testDrawCard.c dominion.o rngs.o $(CFLAGS)
 
@@ -25,25 +26,37 @@ testAll: dominion.o testSuite.c
 interface.o: interface.h interface.c
 	gcc -c interface.c -g  $(CFLAGS)
 
+player: player.c interface.o
+	gcc -o player player.c -g  dominion.o rngs.o interface.o $(CFLAGS)
+
+all: playdom player 
+
 runtests: testDrawCard 
 	./testDrawCard &> unittestresult.out
 	gcov dominion.c >> unittestresult.out
 	cat dominion.c.gcov >> unittestresult.out
 
 
-testRandom: randomtestcard2.c dominion.o rngs.o
-	gcc  -o testRandom -g  randomtestcard2.c dominion.o rngs.o $(CFLAGS)
+testAdventurer: randomtestadventurer.c dominion.o rngs.o
+	gcc  -o testAdventurer -g  randomtestadventurer.c dominion.o rngs.o $(CFLAGS)
 
-runRandom: testRandom
-	./testRandom &> randomtestresult.out
-	gcov dominion.c >> randomtestresult.out
-	cat dominion.c.gcov >> randomtestresult.out
+testCard1: randomtestcard1.c dominion.o rngs.o
+	gcc  -o testCard1 -g  randomtestcard1.c dominion.o rngs.o $(CFLAGS)
 
+testCard2: randomtestcard2.c dominion.o rngs.o
+	gcc  -o testCard2 -g  randomtestcard2.c dominion.o rngs.o $(CFLAGS)
 
-player: player.c interface.o
-	gcc -o player player.c -g  dominion.o rngs.o interface.o $(CFLAGS)
+runRandomTests: testCard1 testCard2 testAdventurer
+	./testCard1 &> randomtestcard1.out
+	gcov -b -f dominion.c >> randomtestcard1.out
+	cat dominion.c.gcov >> randomtestcard1.out
+	./testCard2 &> randomtestcard2.out
+	gcov -b -f dominion.c >> randomtestcard2.out
+	cat dominion.c.gcov >> randomtestcard2.out
+	./testAdventurer &> randomtestadventurer.out
+	gcov -b -f dominion.c >> randomtestadventurer.out
+	cat dominion.c.gcov >> randomtestadventurer.out
 
-all: playdom player 
 
 clean:
 	rm -f *.o playdom.exe playdom player player.exe  *.gcov *.gcda *.gcno *.so *.out testDrawCard testDrawCard.exe
